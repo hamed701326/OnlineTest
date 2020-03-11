@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en,fa">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Home</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<div class="app-container">
+    <div class="app-top-menu">
+        <div class="app-brand-box">
+            <div class="app-brand-title">
+                Admin Panel
+            </div>
+        </div>
+
+    </div>
+    <div class="app-side-bar">
+        <div class="menu">Users</div>
+        <ul class="menu-ul">
+            <li class="menu-li" >
+                User List
+            </li>
+            <li class="menu-li" onclick="loadPage('list-user-by-admin')">
+                Register Users
+            </li>
+            <li class="menu-li" >Delete Users</li>
+            <li class="menu-li" >Block Users</li>
+        </ul>
+        <div class="menu">Course</div>
+        <ul class="menu-ul">
+            <li class="menu-li">Course List</li>
+            <li class="menu-li">Add Course</li>
+            <li class="menu-li">Edit Course</li>
+        </ul>
+    </div>
+    <div class="app-content" id="app-content">
+        <div class="app-content-load" id="app-content-load">
+
+        </div>
+    </div>
+</div>
+<script src="../../assets/js/jquery-3.4.1.min.js"></script>
+<script src="../../assets/js/popper.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="../../assets/js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<html lang="en">
+<body>
+    <form onsubmit="register()">
+        <table >
+            <tr>
+                <th>UserName</th>
+                <th>
+                    <input type="text" id="username" name="userName" required/>
+                </th>
+            </tr>
+
+            <tr>
+                <th>Password</th>
+                <th>
+                    <input type="password" id="password" name="password" required
+                           title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" />
+                </th>
+            </tr>
+            <tr>
+                <th>Enter again password</th>
+                <th>
+                    <input type="password" id="password1" required />
+                </th>
+            </tr>
+            <tr><
+                <th><label > Role </label> </th>
+                <th>
+                    <select name="role" id="role">
+                        <option value="Master">Master</option>
+                        <option value="Student">Student</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2">
+                <input type="submit" value="sign up" id="submit"  width="100%"/>
+                </th>
+            </tr>
+
+        </table>
+    </form>
+    <div id="resultContainer" style="display: none;">
+        <pre style="color: green;">
+             <code></code>
+         </pre>
+    </div>
+</body>
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="features/user-management/sign-up-by-user.js"></script>
+</html>
