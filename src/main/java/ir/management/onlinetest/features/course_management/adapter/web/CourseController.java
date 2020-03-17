@@ -6,12 +6,15 @@ import ir.management.onlinetest.features.course_management.application.port.List
 import ir.management.onlinetest.features.course_management.application.port.in.AddCourseByAdminUseCase;
 import ir.management.onlinetest.features.course_management.application.port.in.AddMemberByAdminUseCase;
 import ir.management.onlinetest.features.course_management.application.port.in.ListCourseByAdminUseCase;
+import ir.management.onlinetest.features.course_management.application.port.in.ListMemberByAdminUseCase;
 import ir.management.onlinetest.features.course_management.application.port.in.command.AddCourseByAdminCommand;
 import ir.management.onlinetest.features.course_management.application.port.in.command.AddMemberByAdminCommand;
 import ir.management.onlinetest.features.course_management.application.port.in.command.ListCourseByAdminCommand;
+import ir.management.onlinetest.features.course_management.application.port.in.command.ListMemberByAdminCommand;
 import ir.management.onlinetest.features.course_management.application.port.in.outcome.AddCourseByAdminOutcome;
 import ir.management.onlinetest.features.course_management.application.port.in.outcome.AddMemberByAdminOutcome;
 import ir.management.onlinetest.features.course_management.application.port.in.outcome.ListCourseByAdminOutcome;
+import ir.management.onlinetest.features.course_management.application.port.in.outcome.ListMemberByAdminOutcome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +31,8 @@ public class CourseController {
     private AddCourseByAdminUseCase addCourseService;
     @Autowired
     private AddMemberByAdminUseCase addMemberService;
+    @Autowired
+    private ListMemberByAdminUseCase listMemberService;
     @PostMapping("/list")
     public ListCourseByAdminOutcome getCourses(ListCourseByAdminCommand command){
         return listCourseService.list(command);
@@ -40,5 +45,9 @@ public class CourseController {
     public AddMemberByAdminOutcome addMemberByAdmin(@RequestBody AddMemberByAdminCommand command,
                                                     BindingResult result){
         return addMemberService.addMember(command,result);
+    }
+    @PostMapping("/list-member-by-admin")
+    public ListMemberByAdminOutcome listMemberByAdmin(@RequestBody ListMemberByAdminCommand command){
+        return listMemberService.list(command);
     }
 }

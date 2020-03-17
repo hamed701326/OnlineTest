@@ -8,6 +8,8 @@ import ir.management.onlinetest.features.admin_management.domain.UserDTO;
 public class UserMapper {
     public static UserDTO map(Account account)
     {
+        if(account==null)
+            return null;
         return new UserDTO(
             account.getId(),
             account.getUserName(),

@@ -39,6 +39,9 @@ function prepareTable(data) {
                 "<button type='submit' class='btn btn-outline-primary btn-sm' onclick='addMember(" + data[i].id+")'>add Member</button>" +
                 "</td>";
             content += "<td >" +
+                "<button type='submit' class='btn btn-outline-primary btn-sm' onclick='listMember(" + data[i].id+")'>list Member</button>" +
+                "</td>";
+            content += "<td >" +
                 "<button type='submit' class='btn btn-outline-primary btn-sm' onclick='editCourse(" + data[i].id+")'>edit Course</button>" +
                 "</td>";
             content += "</tr>";
@@ -55,4 +58,9 @@ function addMember(courseId) {
     sessionStorage.setItem("courseId",courseId);
     $("#app-content-load").load("features/course-management/add-member-by-admin/add-member-by-admin.html")
 
-}   
+}
+function listMember(courseId) {
+    sessionStorage.setItem("courseId",courseId);
+    $("#app-content-load").load("features/course-management/list-member-by-admin/List-member-by-admin.html")
+
+}
