@@ -7,6 +7,7 @@ import ir.management.onlinetest.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 @Service
 public class SignUpCommandMapper {
@@ -23,8 +24,9 @@ public class SignUpCommandMapper {
         , Status.WAITING_FOR_CONFIRM
         ,roleRepository
                 .findByName(
-                command.getRole()
-                )
+                command.getRole())
+        ,
+        new ArrayList<>()
         );
     }
 }

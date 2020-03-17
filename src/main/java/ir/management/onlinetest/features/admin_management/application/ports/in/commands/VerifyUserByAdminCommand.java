@@ -1,12 +1,13 @@
 package ir.management.onlinetest.features.admin_management.application.ports.in.commands;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import ir.management.onlinetest.entities.Role;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
+@Setter
+@NoArgsConstructor
 @ToString
 public class VerifyUserByAdminCommand {
     private Long userId;
+    private String role;
 }

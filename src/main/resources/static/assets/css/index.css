@@ -1,14 +1,14 @@
 @font-face {
     font-family: 'myRoboto';
-    src: url("assets/fonts/en/Roboto/Roboto-Regular.ttf");
+    src: url("../../assets/fonts/en/Roboto/Roboto-Regular.ttf");
 }
 @font-face {
     font-family: 'myOpenSansc';
-    src: url("assets/fonts/en/Open_Sans/OpenSans-Regular.ttf");
+    src: url("../../assets/fonts/en/Open_Sans/OpenSans-Regular.ttf");
 }
 @font-face {
     font-family: 'myIransance';
-    src: url("assets/fonts/fa/iransans/iransansweb.ttf");
+    src: url("../../assets/fonts/fa/iransans/iransansweb.ttf");
 }
 body,html{
     margin:0;

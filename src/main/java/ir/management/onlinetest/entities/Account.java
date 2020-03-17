@@ -1,5 +1,6 @@
 package ir.management.onlinetest.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import ir.management.onlinetest.enums.Status;
 import ir.management.onlinetest.features.user_management.application.ports.in.commands.SignUpCommand;
 import lombok.*;
@@ -7,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.util.Date;
-@ToString(exclude = "role")
-@EqualsAndHashCode(exclude = "role")
+import java.util.List;
+
+@ToString(exclude = {"role","courseList"})
+@EqualsAndHashCode(exclude = {"role","courseList"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +29,8 @@ public class Account {
     private Date createDate;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+    @ManyToMany(mappedBy ="members",fetch = FetchType.LAZY)
+    private List<Course> courseList;
 }

@@ -14,7 +14,8 @@ public class UserMapper {
             account.getRole().getName(),
             account.getCreateDate(),
             account.getStatus().toString(),
-            account.isActive()
+            account.isActive(),
+            account.getCourseList()
         );
     }
 }

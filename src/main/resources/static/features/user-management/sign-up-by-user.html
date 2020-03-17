@@ -1,18 +1,17 @@
-<html lang="en">
-<body>
-    <form onsubmit="register()">
-        <table >
+
+    <form onsubmit="checkPassword(this)">
+        <table>
             <tr>
                 <th>UserName</th>
                 <th>
-                    <input type="text" id="username" name="userName" required/>
+                    <input type="text" id="username" name="userName"  onkeydown="checkSizeUserName()" onfocusout="checkExistUserName()" required/>
                 </th>
             </tr>
 
             <tr>
                 <th>Password</th>
                 <th>
-                    <input type="password" id="password" name="password" required
+                    <input type="password" id="password"  name="password" required
                            title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" />
                 </th>
@@ -40,15 +39,12 @@
             </tr>
 
         </table>
+        <div id="resultContainer">
+            <pre id="pre" style="color: red"></pre>
+        </div>
     </form>
-    <div id="resultContainer" style="display: none;">
-        <pre style="color: green;">
-             <code></code>
-         </pre>
-    </div>
-</body>
+
 <script src="/assets/js/jquery-3.4.1.min.js"></script>
 <script src="/assets/js/popper.min.js"></script>
 <script src="/assets/js/bootstrap.min.js"></script>
 <script src="features/user-management/sign-up-by-user.js"></script>
-</html>

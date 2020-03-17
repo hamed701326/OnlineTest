@@ -4,10 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OnlinetestApplication {
-
+public class OnlineTestApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OnlinetestApplication.class, args);
+        SpringApplication.run(OnlineTestApplication.class, args);
     }
-
 }
