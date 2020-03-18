@@ -3,11 +3,9 @@ package ir.management.onlinetest.features.course_management.application.port.in.
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
 @Getter
 @Setter
-public class AddCourseByAdminCommand {
-    private String title;
-    private Date startDate;
-    private Date expiredDate;
+public class RemoveMemberByAdminCommand {
+    private Long userId;
+    private  Long courseId;
 }

@@ -25,7 +25,7 @@ public class AddCourseService implements AddCourseByAdminUseCase {
                 command.getTitle(),
                 new Date(),
                 command.getStartDate(),
-                command.getExpireDate(),
+                command.getExpiredDate(),
                 null
                 )
         ));

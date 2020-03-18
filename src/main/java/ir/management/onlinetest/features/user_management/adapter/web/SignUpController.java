@@ -27,7 +27,7 @@ public class SignUpController {
     @PostMapping(value = "/sign-up-by-user")
     public SignUpOutcome signUp(@RequestBody SignUpCommand signUpCommand,BindingResult result){
         String role= signUpCommand.getRole();
-        Account account1= accountRepository.save(
+        Account account1= accountRepository.saveAndFlush(
                 signUpCommandMapper.map(signUpCommand)
         );
         SignUpOutcome response=new SignUpOutcome();

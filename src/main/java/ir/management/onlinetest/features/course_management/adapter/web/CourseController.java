@@ -1,20 +1,8 @@
 package ir.management.onlinetest.features.course_management.adapter.web;
 
-import ir.management.onlinetest.features.course_management.application.port.AddCourseService;
-import ir.management.onlinetest.features.course_management.application.port.AddMemberService;
-import ir.management.onlinetest.features.course_management.application.port.ListCourseService;
-import ir.management.onlinetest.features.course_management.application.port.in.AddCourseByAdminUseCase;
-import ir.management.onlinetest.features.course_management.application.port.in.AddMemberByAdminUseCase;
-import ir.management.onlinetest.features.course_management.application.port.in.ListCourseByAdminUseCase;
-import ir.management.onlinetest.features.course_management.application.port.in.ListMemberByAdminUseCase;
-import ir.management.onlinetest.features.course_management.application.port.in.command.AddCourseByAdminCommand;
-import ir.management.onlinetest.features.course_management.application.port.in.command.AddMemberByAdminCommand;
-import ir.management.onlinetest.features.course_management.application.port.in.command.ListCourseByAdminCommand;
-import ir.management.onlinetest.features.course_management.application.port.in.command.ListMemberByAdminCommand;
-import ir.management.onlinetest.features.course_management.application.port.in.outcome.AddCourseByAdminOutcome;
-import ir.management.onlinetest.features.course_management.application.port.in.outcome.AddMemberByAdminOutcome;
-import ir.management.onlinetest.features.course_management.application.port.in.outcome.ListCourseByAdminOutcome;
-import ir.management.onlinetest.features.course_management.application.port.in.outcome.ListMemberByAdminOutcome;
+import ir.management.onlinetest.features.course_management.application.port.in.*;
+import ir.management.onlinetest.features.course_management.application.port.in.command.*;
+import ir.management.onlinetest.features.course_management.application.port.in.outcome.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +21,8 @@ public class CourseController {
     private AddMemberByAdminUseCase addMemberService;
     @Autowired
     private ListMemberByAdminUseCase listMemberService;
+    @Autowired
+    private RemoveMemberByAdminUseCase removeMemberService;
     @PostMapping("/list")
     public ListCourseByAdminOutcome getCourses(ListCourseByAdminCommand command){
         return listCourseService.list(command);
@@ -49,5 +39,9 @@ public class CourseController {
     @PostMapping("/list-member-by-admin")
     public ListMemberByAdminOutcome listMemberByAdmin(@RequestBody ListMemberByAdminCommand command){
         return listMemberService.list(command);
+    }
+    @PostMapping("/remove-member-by-admin")
+    public RemoveMemberByAdminOutcome removeMemberByAdmin(@RequestBody RemoveMemberByAdminCommand command){
+        return removeMemberService.remove(command);
     }
 }

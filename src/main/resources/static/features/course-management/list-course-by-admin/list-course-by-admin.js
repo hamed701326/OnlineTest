@@ -14,18 +14,16 @@ function listCourseByAdmin() {
         contentType:"application/json",
         data:JSON.stringify(listCourseByAdminCommand),
         success:function (data) {
-            alert(1+". received");
+
             console.table(data.courseList);
             prepareTable(data.courseList);
         },
         error:function (errorMessage) {
-            alert(2+". error");
-            showAlert('danger', errorMessage.responseJSON.message);
+            alert(errorMessage.responseJSON.message);
         }
     })
 }
 function prepareTable(data) {
-    alert(3+".received in prepareTable");
     if(data!==undefined) {
         let content = '';
         for (let i = 0; i < data.length; i++) {

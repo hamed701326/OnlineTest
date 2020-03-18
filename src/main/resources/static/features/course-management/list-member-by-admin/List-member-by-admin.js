@@ -4,7 +4,6 @@ $("#list-member-by-admin").ready(function () {
 function listMemberByAdmin() {
     const listMemberByAdminCommand=
         {"courseId":sessionStorage.getItem("courseId")};
-    alert("courseId: "+listMemberByAdminCommand.courseId);
     jQuery.ajax({
         url:"http://localhost:9001/course/list-member-by-admin",
         type:"POST",
@@ -30,7 +29,6 @@ function prepareTable(data) {
                 + "</td>";
             content += "<td >" + data[i].createDate + "</td>";
             content += "<td >" + data[i].status + "</td>";
-            content += "<td >" + data[i].isActive + "</td>";
             content += "<td >" +
                 "<button type='submit' class='btn btn-outline-danger btn-sm' onclick='remove(" + data[i].userId + ")'>remove</button>" +
                 "</td>";
@@ -54,11 +52,11 @@ function remove(id) {
         contentType:"application/json",
         data:JSON.stringify(removeMemberByAdminCommand),
         success:function (data) {
-            if(data.message===null){
-                alert("User confirmed");
-                listUserByAdmin();
+            if(data.validated){
+                alert("User removed from this lesson");
+                listMemberByAdmin();
             }else {
-                alert(data.message)
+                alert("User doesn't removed from this lesson unfortunately!")
             }
         },
         error:function (errorMessage) {

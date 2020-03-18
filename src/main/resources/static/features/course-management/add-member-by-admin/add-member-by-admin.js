@@ -53,7 +53,7 @@ function createTable(data) {
             content += "<td >" + data[i].userName + "</td>";
             content += "<td >"  + data[i].role+ "</td>";
             content += "<td >" + data[i].isActive + "</td>";
-            //Todo: check if is this user exist in this course
+
             if(data[i].courseList.length>0 && checkExistUserinThisCourse(data[i].courseList)) {
                 content+="<td style='color: limegreen'> Added </td>"
             }else {

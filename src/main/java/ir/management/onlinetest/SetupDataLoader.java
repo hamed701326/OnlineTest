@@ -29,19 +29,21 @@ public class SetupDataLoader implements
     public void onApplicationEvent(ContextRefreshedEvent event){
         if (alreadySetup)
             return;
-        if(!(accountRepository.findByUserName("Admin")==null))
-            return;
         createRoleIfNotFound("Admin");
         createRoleIfNotFound("User");
-
-        Role adminRole = roleRepository.findByName("ADMIN");
-        Account user = new Account();
-        user.setUserName("Admin");
-        user.setPassword("Admin");
-        user.setCreateDate(new Date());
-        user.setRole(adminRole);
-        user.setActive(true);
-        accountRepository.save(user);
+        createRoleIfNotFound("Master");
+        createRoleIfNotFound("Student");
+        if(accountRepository.findByUserName("Admin")==null)
+        {
+            Role adminRole = roleRepository.findByName("ADMIN");
+            Account user = new Account();
+            user.setUserName("Admin");
+            user.setPassword("Admin");
+            user.setCreateDate(new Date());
+            user.setRole(adminRole);
+            user.setActive(true);
+            accountRepository.save(user);
+        }
 
         alreadySetup = true;
     }
