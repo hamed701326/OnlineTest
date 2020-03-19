@@ -41,6 +41,12 @@ public class UserController {
         model.addAttribute("userName",userName);
         return "../static/features/admin-management/index";
     }
+    @GetMapping(value = "/master/{userName}")
+    @Secured("ROLE_Master")
+    public String getMasterPage(@PathVariable("userName") String userName,Model model){
+        model.addAttribute("userName",userName);
+        return "../static/features/master-managment/index";
+    }
     @GetMapping(value = "/user/{userName}")
     public String getUserPage(@PathVariable("userName") String userName, Model model){
         model.addAttribute("userName",userName);

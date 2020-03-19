@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Master Home</title>
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="/" />
+</head>
+<body>
+<div class="app-container">
+    <div class="app-top-menu">
+        <div class="app-brand-box">
+            <div class="app-brand-title">
+                Master Panel
+            </div>
+        </div>
+
+    </div>
+    <div class="app-side-bar">
+        <div class="menu">Students</div>
+        <ul class="menu-ul">
+            <li class="menu-li" >
+                User List
+            </li>
+
+        </ul>
+        <div class="menu">Course</div>
+        <ul class="menu-ul">
+            <li class="menu-li" onclick="loadPage('list-course-by-master.html')">Course List</li>
+        </ul>
+        <div class="menu">Test</div>
+        <ul class="menu-ul">
+            <li class="menu-li" onclick="loadPage('list-test-by-master.html')"> List</li>
+        </ul>
+    </div>
+    <div class="app-content" id="app-content">
+        <div class="app-content-load" id="app-content-load">
+
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../assets/js/jquery-3.4.1.min.js"></script>
+<script src="../../assets/js/popper.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="features/master-management/index.js"></script>
+</html>

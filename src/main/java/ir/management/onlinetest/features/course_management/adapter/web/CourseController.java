@@ -1,5 +1,6 @@
 package ir.management.onlinetest.features.course_management.adapter.web;
 
+import ir.management.onlinetest.features.course_management.application.port.ListCourseService;
 import ir.management.onlinetest.features.course_management.application.port.in.*;
 import ir.management.onlinetest.features.course_management.application.port.in.command.*;
 import ir.management.onlinetest.features.course_management.application.port.in.outcome.*;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/course")
 public class CourseController {
     @Autowired
-    private ListCourseByAdminUseCase listCourseService;
+    private ListCourseService listCourseService;
     @Autowired
     private AddCourseByAdminUseCase addCourseService;
     @Autowired
@@ -26,6 +27,10 @@ public class CourseController {
     @PostMapping("/list")
     public ListCourseByAdminOutcome getCourses(ListCourseByAdminCommand command){
         return listCourseService.list(command);
+    }
+    @PostMapping("/list-course-by-master")
+    public ListCourseByMasterOutcome getCourses(@RequestBody ListCourseByMasterCommand command,BindingResult result){
+        return listCourseService.listByMaster(command,result);
     }
     @PostMapping("/add-course-by-admin")
     public AddCourseByAdminOutcome addCourse(@RequestBody AddCourseByAdminCommand command, BindingResult result){
