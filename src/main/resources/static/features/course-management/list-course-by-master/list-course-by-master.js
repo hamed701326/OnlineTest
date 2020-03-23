@@ -1,12 +1,13 @@
 $("#list-course-by-master").ready(function () {
-    listCourseByMaster()
+    listCourseByMaster();
+
 });
 function listCourseByMaster() {
     const listCourseByMasterCommand=
         {
             "searchAttribute":[],
             "pageNo":1,
-            "pageSize":11
+            "pageSize":11,
         };
     jQuery.ajax({
         url:"http://localhost:9001/course/list-course-by-master",
@@ -14,9 +15,14 @@ function listCourseByMaster() {
         contentType:"application/json",
         data:JSON.stringify(listCourseByMasterCommand),
         success:function (data) {
-
-            console.table(data.courseList);
-            prepareTable(data.courseList);
+            if (data.validated) {
+                prepareTable(data.courseList);
+            } else {
+                //Set error messages
+                $.each(data.errorMessages, function (key, value) {
+                    $('input[name=' + key + ']').after('<span class="error">' + value + '</span>');
+                });
+            }
         },
         error:function (errorMessage) {
             alert(errorMessage.responseJSON.message);
@@ -48,10 +54,10 @@ function prepareTable(data) {
 
 function createTest(courseId) {
     sessionStorage.setItem("courseId",courseId);
-    $("#app-content-load").load("features/test-management/create-test-by-master/create-member-by-test.html")
+    $("#app-content-load").load("features/exam-management/create-exam-by-master/create-exam-by-master.html")
 
 }
 function listTest(courseId) {
     sessionStorage.setItem("courseId", courseId);
-    $("#app-content-load").load("features/test-management/list-test-by-master/list-test-by-master.html");
+    $("#app-content-load").load("features/exam-management/list-exam-by-master/list-exam-by-master.html");
 }

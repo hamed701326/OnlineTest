@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/course")
 public class CourseController {
@@ -29,8 +31,9 @@ public class CourseController {
         return listCourseService.list(command);
     }
     @PostMapping("/list-course-by-master")
-    public ListCourseByMasterOutcome getCourses(@RequestBody ListCourseByMasterCommand command,BindingResult result){
-        return listCourseService.listByMaster(command,result);
+    public ListCourseByMasterOutcome getCourses(@RequestBody ListCourseByMasterCommand command, BindingResult result
+    , HttpServletRequest request){
+        return listCourseService.listByMaster(command,result,request);
     }
     @PostMapping("/add-course-by-admin")
     public AddCourseByAdminOutcome addCourse(@RequestBody AddCourseByAdminCommand command, BindingResult result){

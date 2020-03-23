@@ -1,0 +1,33 @@
+<script src="features/exam-management/create-exam-by-master/create-exam-by-master.js"></script>
+<div class="modal fade" id="create-exam-by-master" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Create New Test</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+    <form>
+    <div class="form-group">
+    <label for="title-field" class="col-form-label">Title:</label>
+<input type="text" class="form-control" id="title-field" required>
+    </div>
+    <div class="form-group">
+    <label for="details-field" class="col-form-label">details:</label>
+<input type="text" class="form-control" id="details-field">
+    </div>
+    <div class="form-group">
+    <label for="RequiredTime-field" class="col-form-label">Required Time(min):</label>
+<input type="text"  class="form-control" id="RequiredTime-field" required>
+    </div>
+    </form>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary" onclick="createExamByMaster()">Save New Test</button>
+</div>
+</div>
+</div>
+</div>

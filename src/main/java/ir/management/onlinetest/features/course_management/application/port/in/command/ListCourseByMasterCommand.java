@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ListCourseByMasterCommand {
-    private Long masterId;
     private List<String> searchAttribute;
     private int pageNo;
     private int pageSize;

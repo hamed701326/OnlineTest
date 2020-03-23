@@ -1,5 +1,6 @@
 package ir.management.onlinetest.features.course_management.application.port;
 
+import ir.management.onlinetest.entities.Account;
 import ir.management.onlinetest.entities.Course;
 import ir.management.onlinetest.features.course_management.application.port.in.ListCourseByAdminUseCase;
 import ir.management.onlinetest.features.course_management.application.port.in.ListCourseByMasterUseCase;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,11 +51,11 @@ public class ListCourseService implements ListCourseByAdminUseCase , ListCourseB
     }
 
     @Override
-    public ListCourseByMasterOutcome listByMaster(ListCourseByMasterCommand command, BindingResult result) {
+    public ListCourseByMasterOutcome listByMaster(ListCourseByMasterCommand command, BindingResult result, HttpServletRequest request) {
         ListCourseByMasterOutcome response=new ListCourseByMasterOutcome();
         Pageable paging = PageRequest.of(1, 10);
 
-        Map<String, String> errors;
+        Map<String, String> errors = new HashMap<>();
 
         if(result.hasErrors()){
 
@@ -65,24 +68,20 @@ public class ListCourseService implements ListCourseByAdminUseCase , ListCourseB
             response.setValidated(false);
             response.setErrorMessages(errors);
         }else {
-            //Todo: check this user exist in database
-            accountRepository.findById(command.getMasterId()).ifPresentOrElse(
-             account ->        {
-                    List<Course> courseList = null;
-                    command.setSearchAttribute(new ArrayList<>());
-                    if ((command.getSearchAttribute()).size() == 0)
-                     courseList = account.getCourseList();
-
-                    response.setCourseList(
-                            courseList != null ?
-                                    courseList
-                                            .stream()
-                                            .map(CourseMapper::map).collect(Collectors.toList())
-                                    :
-                                    null
-                    );
-            },
-            ()->{}
+            Long accountId= (Long) request.getSession().getAttribute("accountId");
+            Account account=accountRepository.findById(accountId).get();
+            List<Course> courseList = null;
+            command.setSearchAttribute(new ArrayList<>());
+            if ((command.getSearchAttribute()).size() == 0)
+             courseList = account.getCourseList();
+            response.setValidated(true);
+            response.setCourseList(
+                    courseList != null ?
+                            courseList
+                                    .stream()
+                                    .map(CourseMapper::map).collect(Collectors.toList())
+                            :
+                            null
             );
         }
           return response;

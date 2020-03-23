@@ -1,5 +1,8 @@
 package ir.management.onlinetest.core.config;
 
+import ir.management.onlinetest.entities.Account;
+import ir.management.onlinetest.repositories.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -14,7 +17,8 @@ import java.util.Map;
 import java.util.Set;
 @Configuration
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
+    @Autowired
+    AccountRepository accountRepository;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
@@ -22,11 +26,16 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Set<String> roles = AuthorityUtils
                 .authorityListToSet(authentication.getAuthorities());
         String userName = authentication.getName();
+        Long accountId=(Long) httpServletRequest.getSession().getAttribute("accountId");
+        if(accountId==null){
+            accountId=accountRepository.findByUserName(userName).getId();
+        }
+        httpServletRequest.getSession().setAttribute("accountId",accountId);
         Map<String, String> authoriryMapper =
                 Map.of(
                         "ROLE_Admin", "/admin/",
-                        "ROLE_Master", "/master",
-                        "ROLE_Student", "/student"
+                        "ROLE_Master", "/master/",
+                        "ROLE_Student", "/student/"
                 );
         String role=roles.iterator().next();
         if (authoriryMapper.keySet().contains(role)) {

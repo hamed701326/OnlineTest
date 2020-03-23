@@ -11,13 +11,14 @@ import java.util.Date;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Entity
-public class Test {
+public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String details;
-    private float  timeRequired;
+    private double  timeRequired;
+    private int numberOfQuestion;
     @Temporal(TemporalType.DATE)
     private Date createDate;
     @ManyToOne
@@ -25,7 +26,7 @@ public class Test {
     private Course course;
 
     @ManyToOne
-    @JoinColumn(name = "master_id")
+    @JoinColumn()
     private Account account;
 
 
