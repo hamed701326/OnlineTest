@@ -36,9 +36,10 @@ public class EditExamService implements EditExamByMasterUseCase {
                             )
             );
         }else {
-            if (command.getTitle().isEmpty())
+            if (command.getTitle().isEmpty()) {
                 response.getErrorMessage().put("IsEmptyTitleFieldError", "this Field shouldn't be empty");
                 response.setValid(false);
+            }
             if (command.getRequiredTime() < 5 || command.getRequiredTime() > 240) {
                 response.getErrorMessage().put("NotLogicalRequiredTimeError", "Required Time shouldn't less than 5 min and more than 240");
                 response.setValid(false);
@@ -50,7 +51,7 @@ public class EditExamService implements EditExamByMasterUseCase {
                             if(response.isValid()) {
                                 exam.setTimeRequired(command.getRequiredTime());
                                 exam.setTitle(command.getTitle());
-                                exam.setTitle(command.getDetails());
+                                exam.setDetails(command.getDetails());
                                 examRepository.saveAndFlush(exam);
                             }
                         }else {
@@ -63,6 +64,6 @@ public class EditExamService implements EditExamByMasterUseCase {
                     }
             );
         }
-        return null;
+        return response;
     }
 }

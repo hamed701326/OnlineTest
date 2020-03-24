@@ -17,10 +17,8 @@ function listExamByMaster() {
         data:JSON.stringify(listExamByMasterCommand),
         success:function (data) {
             if (data.validated) {
-                alert("data valid");
                 prepareTable(data.examList);
             } else {
-                alert("data not valid");
                 //Set error messages
                 $.each(data.errorMessages, function (key, value) {
                     $('input[name=' + key + ']').after('<span class="error">' + value + '</span>');
@@ -39,13 +37,16 @@ function prepareTable(data) {
 
             content += "<tr>";
             content += "<th scope='row'>" + data[i].id + "</th>";
-            content += "<td >" + data[i].title + "</td>";
-            content += "<td >" + data[i].details+ "</td>";
-            content += "<td >" + data[i].timeRequired + "</td>";
+            content += "<td id='title"+data[i].id+"'>" + data[i].title + "</td>";
+            content += "<td id='details"+data[i].id+"'>" + data[i].details+ "</td>";
+            content += "<td id='timeRequired"+data[i].id+"'>" + data[i].timeRequired + "</td>";
             content += "<td >" + data[i].createBy + "</td>";
             content += "<td >" + data[i].numberOfQuestion + "</td>";
             content += "<td >" +
-                "<button type='submit' class='btn btn-outline-primary btn-sm' onclick='editTest(" + data[i].id+")'>edit Test</button>" +
+                "<button type='submit' class='btn btn-outline-secondary btn-sm' onclick='editTest(" + data[i].id+")'>edit Test</button>" +
+                "</td>";
+            content += "<td >" +
+                "<button type='submit' class='btn btn-outline-danger btn-sm' onclick='deleteTest(" + data[i].id+")'>delete</button>" +
                 "</td>";
             content += "</tr>";
         }
@@ -58,6 +59,32 @@ function showCreateExamByMasterModal(){
 }
 function editTest(testId) {
     sessionStorage.setItem("testId",testId);
-    $("#app-content-load").load("features/test-management/add-question-by-master/add-question-by-Master.html")
+    $("#edit-exam-by-master-modal-box").load("features/exam-management/edit-exam-by-master/edit-exam-by-master.html")
 
+}
+function deleteTest(id) {
+    const deleteExamByMasterCommand={
+        "examId":id
+    };
+    jQuery.ajax({
+        url:"http://localhost:9001/test/delete-test-by-master",
+        type:"POST",
+        contentType: "application/json",
+        data:JSON.stringify(deleteExamByMasterCommand),
+        success:function (data) {
+            if(data.valid){
+                alert("your exam successfully deleted.");
+                listExamByMaster()
+            }else{
+                //Set error messages
+                $.each(data.errorMessages, function (key, value) {
+                    $('input[name=' + key + ']').after('<span class="error">' + value + '</span>');
+                });
+            }
+
+        },
+        error:function (errorMessage) {
+            alert(errorMessage.responseJSON.message);
+        }
+    })
 }

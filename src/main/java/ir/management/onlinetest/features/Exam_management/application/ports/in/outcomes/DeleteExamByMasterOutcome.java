@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class EditExamByMasterOutcome {
+public class DeleteExamByMasterOutcome {
     boolean valid;
     Map<String,String> errorMessage=new HashMap<>();
 }

@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class EditExamByMasterCommand {
-    private Long courseId;
     private Long examId;
     private String title;
     private String details;
