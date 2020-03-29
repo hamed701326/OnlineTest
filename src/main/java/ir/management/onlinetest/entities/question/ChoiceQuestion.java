@@ -1,15 +1,25 @@
 package ir.management.onlinetest.entities.question;
 
 import ir.management.onlinetest.entities.question.Question;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
-
+import java.util.List;
+@Getter
+@Setter
+@Entity
+@DiscriminatorValue("choice-question")
 public class ChoiceQuestion extends Question {
-    private ArrayList<String> choices;
-    public void addChoice(String choice,boolean correct){
-        choices.add(choice);
-        if(correct){
-            setAnswer(""+choices.size());
-        }
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    private List<Answer> answers;
+
+    public void setAnswer() {
+        super.setAnswer(answers
+                .stream()
+                .filter(Answer::isCorrect)
+                .findFirst().orElse(new Answer()).getContent());
     }
 }
