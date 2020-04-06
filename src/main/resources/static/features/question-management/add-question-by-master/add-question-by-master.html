@@ -1,0 +1,98 @@
+<head>
+    <meta charset="utf-8">
+    <STYLE>
+        input{
+            width:300px;
+            font-size:18px;
+            margin:10px  ;
+            padding: 10px;
+        }
+        .remove{
+            width:30px;
+            height:30px;
+            font-size:20px ;
+            background-color: tomato;
+            color: white;
+            border: none;
+            border-radius: 15px;
+        }
+        #addRow,#submit{
+            width: 130px;
+            height: 40px;
+            font-size:16px ;
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            margin: 20px;
+        }
+        button:hover{
+            cursor: pointer;
+        }
+        tr:hover{
+            cursor: move;
+        }
+    </STYLE>
+</head>
+<div class="container">
+    <table>
+        <tbody>
+        <tr>
+            <td><label for="title">Title</label></td>
+            <td><input type="text" id="title"></td>
+        </tr>
+        <tr>
+            <td><label for="content">Content</label></td>
+            <td><input type="text" id="content"></td>
+        </tr>
+        <tr>
+            <td><label for="score">Score</label></td>
+            <td><input type="text" id="score"></td>
+        </tr>
+        <tr>
+            <td><label >Type</label></td>
+            <td rowspan="2">
+                <input type="radio" id="Choice Question" name="type" value="Choice Question">
+                <label for="Choice Question">Choice Question</label>
+            </td>
+            <td>
+                <input type="radio" id="Free Question" name="type" value="Free Question">
+                <label for="Free Question">Free Question</label>
+            </td>
+        </tr>
+
+        </tbody>
+
+    </table>
+    <div style="display: none" id="div-choice">
+        <table >
+            <tbody class="option">
+            <tr>
+                <td>
+                    <input type="text" name="name" id="" style="background-color: greenyellow" required>
+                </td>
+                <td>
+                    <button class="remove">-</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="name" required>
+                </td>
+                <td>
+                    <button class="remove">-</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button id="addRow">Add</button>
+    </div>
+    <div style="display: none" id="div-free">
+        <label for="answer">Answer</label>
+        <input type="text" minlength="0" maxlength="200" style="height: 300px ;width:600px" id="answer">
+    </div>
+    <button id="submit" onclick="submit()">Submit</button>
+    <div id="result">
+
+    </div>
+</div>
+<script src="features/question-management/add-question-by-master/add-question-by-master.js"></script>
