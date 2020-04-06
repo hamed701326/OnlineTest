@@ -6,12 +6,11 @@ import ir.management.onlinetest.features.course_management.application.port.in.c
 import ir.management.onlinetest.features.course_management.application.port.in.outcome.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/course")
@@ -35,6 +34,12 @@ public class CourseController {
     , HttpServletRequest request){
         return listCourseService.listByMaster(command,result,request);
     }
+    @PostMapping("/list-course-by-student")
+    public ListCourseByStudentOutcome getCourses(@RequestBody ListCourseByStudentCommand command,
+                                                 BindingResult result,
+                                                 HttpServletRequest request){
+        return listCourseService.listByStudent(command,result,request);
+    }
     @PostMapping("/add-course-by-admin")
     public AddCourseByAdminOutcome addCourse(@RequestBody AddCourseByAdminCommand command, BindingResult result){
         return addCourseService.addCourse(command,result);
@@ -51,5 +56,16 @@ public class CourseController {
     @PostMapping("/remove-member-by-admin")
     public RemoveMemberByAdminOutcome removeMemberByAdmin(@RequestBody RemoveMemberByAdminCommand command){
         return removeMemberService.remove(command);
+    }
+    @GetMapping()
+    public ModelAndView getCoursePage(){
+        return new ModelAndView(
+                "../static/features/course-management/CoursePanel");
+    }
+    @GetMapping("/course-panel-for-student")
+    public ModelAndView getCoursePageForStudent(){
+        return new ModelAndView(
+                "../static/features/course-management/course-panel-for-student/course-panel-for-student"
+        );
     }
 }

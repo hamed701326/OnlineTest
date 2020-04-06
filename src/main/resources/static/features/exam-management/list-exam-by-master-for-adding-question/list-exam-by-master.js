@@ -43,10 +43,7 @@ function prepareTable(data) {
             content += "<td >" + data[i].createBy + "</td>";
             content += "<td >" + data[i].numberOfQuestion + "</td>";
             content += "<td >" +
-                "<button type='submit' class='btn btn-outline-secondary btn-sm' onclick='editTest(" + data[i].id+")'>edit Test</button>" +
-                "</td>";
-            content += "<td >" +
-                "<button type='submit' class='btn btn-outline-danger btn-sm' onclick='deleteTest(" + data[i].id+")'>delete</button>" +
+                "<button type='submit' class='btn btn-outline-secondary btn-sm' onclick='addQuestion(" + data[i].id+")'>Add Question</button>" +
                 "</td>";
             content += "</tr>";
         }
@@ -54,37 +51,9 @@ function prepareTable(data) {
     }
     $('#details').html("number of records : "+data.length);
 }
-function showCreateExamByMasterModal(){
-    $("#create-exam-by-master-modal-box").load("features/exam-management/create-exam-by-master/create-exam-by-master.html");
-}
-function editTest(testId) {
+
+function addQuestion(testId) {
     sessionStorage.setItem("testId",testId);
-    $("#edit-exam-by-master-modal-box").load("features/exam-management/edit-exam-by-master/edit-exam-by-master.html")
+    $("#app-content-course").load("features/question-management/add-question-menu.html")
 
-}
-function deleteTest(id) {
-    const deleteExamByMasterCommand={
-        "examId":id
-    };
-    jQuery.ajax({
-        url:"http://localhost:9001/test/delete-test-by-master",
-        type:"POST",
-        contentType: "application/json",
-        data:JSON.stringify(deleteExamByMasterCommand),
-        success:function (data) {
-            if(data.valid){
-                alert("your exam successfully deleted.");
-                listExamByMaster()
-            }else{
-                //Set error messages
-                $.each(data.errorMessages, function (key, value) {
-                    $('input[name=' + key + ']').after('<span class="error">' + value + '</span>');
-                });
-            }
-
-        },
-        error:function (errorMessage) {
-            alert(errorMessage.responseJSON.message);
-        }
-    })
 }

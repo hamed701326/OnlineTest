@@ -39,7 +39,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 );
         String role=roles.iterator().next();
         if (authoriryMapper.keySet().contains(role)) {
-            httpServletResponse.sendRedirect(authoriryMapper.get(role) + userName);
+            httpServletResponse.sendRedirect(authoriryMapper.get(role));
         } else  {
             httpServletResponse.sendRedirect("/error/doesn't-exist-this-role/"+role);
         }

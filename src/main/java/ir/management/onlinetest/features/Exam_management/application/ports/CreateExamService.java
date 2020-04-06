@@ -48,7 +48,8 @@ public class CreateExamService implements CreateExamByMasterUseCase {
                     0,
                     new Date(),
                     courseRepository.findById(command.getCourseId()).get(),
-                    accountRepository.findById((Long) request.getSession().getAttribute("accountId")).get()
+                    accountRepository.findById((Long) request.getSession().getAttribute("accountId")).get(),
+                    null
             ));
            response.setValidated(true);
         }

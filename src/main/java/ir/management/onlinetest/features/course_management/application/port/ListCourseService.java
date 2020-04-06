@@ -4,11 +4,14 @@ import ir.management.onlinetest.entities.Account;
 import ir.management.onlinetest.entities.Course;
 import ir.management.onlinetest.features.course_management.application.port.in.ListCourseByAdminUseCase;
 import ir.management.onlinetest.features.course_management.application.port.in.ListCourseByMasterUseCase;
+import ir.management.onlinetest.features.course_management.application.port.in.ListCourseByStudentUseCase;
 import ir.management.onlinetest.features.course_management.application.port.in.command.ListCourseByAdminCommand;
 import ir.management.onlinetest.features.course_management.application.port.in.command.ListCourseByMasterCommand;
+import ir.management.onlinetest.features.course_management.application.port.in.command.ListCourseByStudentCommand;
 import ir.management.onlinetest.features.course_management.application.port.in.mapper.CourseMapper;
 import ir.management.onlinetest.features.course_management.application.port.in.outcome.ListCourseByAdminOutcome;
 import ir.management.onlinetest.features.course_management.application.port.in.outcome.ListCourseByMasterOutcome;
+import ir.management.onlinetest.features.course_management.application.port.in.outcome.ListCourseByStudentOutcome;
 import ir.management.onlinetest.repositories.AccountRepository;
 import ir.management.onlinetest.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class ListCourseService implements ListCourseByAdminUseCase , ListCourseByMasterUseCase {
+public class ListCourseService implements ListCourseByAdminUseCase , ListCourseByMasterUseCase, ListCourseByStudentUseCase {
     @Autowired
     CourseRepository courseRepository;
     @Autowired
@@ -85,5 +88,44 @@ public class ListCourseService implements ListCourseByAdminUseCase , ListCourseB
             );
         }
           return response;
+    }
+
+    @Override
+    public ListCourseByStudentOutcome listByStudent(ListCourseByStudentCommand command,
+                                                    BindingResult result,
+                                                    HttpServletRequest request) {
+        ListCourseByStudentOutcome response=new ListCourseByStudentOutcome();
+        Pageable paging = PageRequest.of(1, 10);
+
+        Map<String, String> errors = new HashMap<>();
+
+        if(result.hasErrors()){
+
+            //Get error message
+            errors = result.getFieldErrors().stream()
+                    .collect(
+                            Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)
+                    );
+
+            response.setValidated(false);
+            response.setErrorMessages(errors);
+        }else {
+            Long accountId= (Long) request.getSession().getAttribute("accountId");
+            Account account=accountRepository.findById(accountId).get();
+            List<Course> courseList = null;
+            command.setSearchAttribute(new ArrayList<>());
+            if ((command.getSearchAttribute()).size() == 0)
+                courseList = account.getCourseList();
+            response.setValidated(true);
+            response.setCourseList(
+                    courseList != null ?
+                            courseList
+                                    .stream()
+                                    .map(CourseMapper::map).collect(Collectors.toList())
+                            :
+                            null
+            );
+        }
+        return response;
     }
 }

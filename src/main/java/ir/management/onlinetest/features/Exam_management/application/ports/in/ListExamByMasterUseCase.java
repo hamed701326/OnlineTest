@@ -7,10 +7,10 @@ import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Secured("ROLE_Master")
+
 public interface ListExamByMasterUseCase {
-    ListExamByMasterOutcome ListByMaster(ListExamByMasterCommand command,
+    @Secured("ROLE_Master")
+    ListExamByMasterOutcome listByMaster(ListExamByMasterCommand command,
                                          HttpServletRequest request,
-                                         BindingResult bindingResult
-                                         );
+                                         BindingResult bindingResult);
 }

@@ -4,14 +4,8 @@ import ir.management.onlinetest.features.Exam_management.application.ports.Creat
 import ir.management.onlinetest.features.Exam_management.application.ports.DeleteExamService;
 import ir.management.onlinetest.features.Exam_management.application.ports.EditExamService;
 import ir.management.onlinetest.features.Exam_management.application.ports.ListExamService;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.CreateExamByMasterCommand;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.DeleteExamByMasterCommand;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.EditExamByMasterCommand;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.ListExamByMasterCommand;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.CreateExamByMasterOutcome;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.DeleteExamByMasterOutcome;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.EditExamByMasterOutcome;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.ListExamByMasterOutcome;
+import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.*;
+import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +38,14 @@ public class ExamController {
     public ListExamByMasterOutcome listExamByMaster(@RequestBody ListExamByMasterCommand command,
                                                     HttpServletRequest request,
                                                     BindingResult result){
-        return listExamService.ListByMaster(command,request,result);
+        return listExamService.listByMaster(command,request,result);
+    }
+    @PostMapping("/list-test-by-student")
+    public ListExamByStudentOutcome listExamByStudent(@RequestBody ListExamByStudentCommand command,
+                                                     HttpServletRequest request,
+                                                     BindingResult result){
+        Long id= (Long) request.getSession().getAttribute("accountId");
+        return listExamService.listByStudent(command, result, request);
     }
     @PostMapping("/edit-test-by-master")
     public EditExamByMasterOutcome editExamByMaster(@RequestBody EditExamByMasterCommand command,

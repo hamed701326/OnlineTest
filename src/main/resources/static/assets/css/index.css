@@ -86,9 +86,17 @@ body,html{
     margin-top: 64px;
     margin-left: 240px;
     position: absolute;
-    width: 100%;
 }
 app-content-load{
     padding-left: 240px;
 
+}
+.logout{
+    align-items: flex-end;
+    text-align: left;
+}
+.app-content-course{
+    margin-left: 240px;
+    margin-top:64px ;
+    position: absolute;
 }

@@ -6,10 +6,8 @@ $(document).ready(function () {
     });
 });
 function loadPage(page) {
-    if (page === "list-user-by-master.html") {
-        $('#app-content-load').load('features/user-management/list-user-by-master/' + page)
-    }else if(page==="list-course-by-master.html") {
-        $('#app-content-load').load('features/course-management/list-course-by-master/'+page)
+    if(page==="list-course-by-student.html") {
+        $('#app-content-load').load('features/course-management/list-course-by-student/'+page)
     }
 
 }

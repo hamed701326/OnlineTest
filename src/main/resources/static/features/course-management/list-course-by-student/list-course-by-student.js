@@ -1,19 +1,19 @@
-$("#list-course-by-master").ready(function () {
-    listCourseByMaster();
+$("#list-course-by-student").ready(function () {
+    listCourseByStudent();
 
 });
-function listCourseByMaster() {
-    const listCourseByMasterCommand=
+function listCourseByStudent() {
+    const listCourseByStudentCommand=
         {
             "searchAttribute":[],
             "pageNo":1,
             "pageSize":11,
         };
     jQuery.ajax({
-        url:"http://localhost:9001/course/list-course-by-master",
+        url:"http://localhost:9001/course/list-course-by-student",
         type:"POST",
         contentType:"application/json",
-        data:JSON.stringify(listCourseByMasterCommand),
+        data:JSON.stringify(listCourseByStudentCommand),
         success:function (data) {
             if (data.validated) {
                 prepareTable(data.courseList);
@@ -40,12 +40,6 @@ function prepareTable(data) {
             content += "<td >" + data[i].startDate+ "</td>";
             content += "<td >" + data[i].expiredDate + "</td>";
             content += "<td >" +
-                "<button type='submit' class='btn btn-outline-primary btn-sm' onclick='createTest(" + data[i].id+")'>Create Test</button>" +
-                "</td>";
-            content += "<td >" +
-                "<button type='submit' class='btn btn-outline-primary btn-sm' onclick='listTest(" + data[i].id+")'>List Tests</button>" +
-                "</td>";
-            content += "<td >" +
                 "<button type='submit' class='btn btn-outline-primary btn-sm' onclick='coursePage(" + data[i].id+")'>Course Page</button>" +
                 "</td>";
             content += "</tr>";
@@ -55,17 +49,8 @@ function prepareTable(data) {
     $('#details').html("number of records : "+data.length);
 }
 
-function createTest(courseId) {
-    sessionStorage.setItem("courseId",courseId);
-    $("#app-content-load").load("features/exam-management/create-exam-by-master/create-exam-by-master.html")
-
-}
-function listTest(courseId) {
-    sessionStorage.setItem("courseId", courseId);
-    $("#app-content-load").load("features/exam-management/list-exam-by-master/list-exam-by-student.html");
-}
 function coursePage(courseId) {
     sessionStorage.setItem("courseId", courseId);
-    var url="http://localhost:9001/course";
+    var url="http://localhost:9001/course/course-panel-for-student";
     $(location).attr('href',url);
 }

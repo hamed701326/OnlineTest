@@ -37,17 +37,21 @@ public class UserController {
     public String getSignInPage(){
         return "../static/features/user-management/sign-in-by-user";
     }
-    @GetMapping(value = "/admin/{userName}")
+    @GetMapping(value = "/admin")
     @Secured("ROLE_Admin")
-    public String getAdminPage(@PathVariable("userName") String userName, Model model){
-        model.addAttribute("userName",userName);
+    public String getAdminPage( Model model){
+
         return "../static/features/admin-management/index";
     }
-    @GetMapping(value = "/master/{userName}")
+    @GetMapping(value = "/master")
     @Secured("ROLE_Master")
-    public String getMasterPage(@PathVariable("userName") String userName, Model model, HttpServletRequest request){
-        model.addAttribute("userName",userName);
+    public String getMasterPage( Model model, HttpServletRequest request){
         return "../static/features/master-management/index";
+    }
+    @GetMapping(value = "/student")
+    @Secured("ROLE_Student")
+    public String getStudentPage( Model model, HttpServletRequest request){
+        return "../static/features/student-management/index";
     }
     @GetMapping(value = "/user/{userName}")
     public String getUserPage(@PathVariable("userName") String userName, Model model){
@@ -57,6 +61,11 @@ public class UserController {
     @GetMapping(value = "/")
     public String getHomePage(){
 //        ModelAndView modelAndView=new ModelAndView("home");
+        return "../static/home";
+    }
+    @GetMapping("/logout")
+    public String logOut(HttpServletRequest request){
+        request.getSession().invalidate();
         return "../static/home";
     }
 

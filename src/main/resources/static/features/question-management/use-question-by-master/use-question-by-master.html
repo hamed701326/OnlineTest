@@ -1,0 +1,28 @@
+<script src="features/question-management/use-question-by-master/use-question-by-master.js"></script>
+<div id="search-box-question">
+    <h5>Search Questions By Title</h5>
+    <label for="title-field">Title</label>
+    <input class="form-control" id="title-field">
+    <button class="btn btn-info" onclick="findAllByTitle()">Search</button>
+</div>
+<div id="search-content-question">
+    <div class="table-responsive-sm">
+        <table class="table table-striped table-hover" id="table-question" style="display: none">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Type</th>
+                <th scope="col">Content</th>
+                <th scope="col">Level</th>
+                <th scope="col">Score</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
