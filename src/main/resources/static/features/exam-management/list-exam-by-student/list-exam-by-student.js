@@ -10,7 +10,7 @@ function listExamByStudent() {
             "pageSize":11,
             "courseId":sessionStorage.getItem("courseId")
         };
-    alert("in listExam");
+
     jQuery.ajax({
         url:"http://localhost:9001/test/list-test-by-student",
         type:"POST",
@@ -53,5 +53,7 @@ function prepareTable(data) {
     $('#details').html("number of records : "+data.length);
 }
 function takeTest(examId) {
-
+    sessionStorage.setItem("examId",examId);
+    var url="http://localhost:9001/test/test-page";
+    $(location).attr('href',url);
 }

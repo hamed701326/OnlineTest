@@ -32,9 +32,11 @@ public class TakeAnswer {
     @JoinColumn
     private TakeExam takeExam;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn
     private Answer answer;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn
     private Question question;
 
 }

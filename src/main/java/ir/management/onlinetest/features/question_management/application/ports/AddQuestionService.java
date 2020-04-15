@@ -48,36 +48,46 @@ public class AddQuestionService implements AddQuestionByMasterUseCase, UseQuesti
             examRepository.findById(command.getExamId()).ifPresentOrElse(
                     exam -> {
                         response.setValid(true);
-                        if (command.getType().equals("choice")) {
+                        Question question;
+                        if (command.getType().equals("Choice Question")) {
+                            question=new ChoiceQuestion(
+                                    command.getAnswers(),
+                                    command.getTitle(),
+                                    command.getContent(),
+                                    command.getLevel(),
+                                    command.getScore()
+                            );
                             exam.getQuestions()
                                     .put(
-                                            new ChoiceQuestion(
-                                                    command.getAnswers(),
-                                                    command.getTitle(),
-                                                    command.getContent(),
-                                                    command.getLevel(),
-                                                    command.getScore()
-                                            )
+                                            questionRepository.saveAndFlush(question)
                                             ,
                                             command.getScore()
                                     );
+                            exam.setNumberOfQuestion(
+                                    exam.getNumberOfQuestion()+1
+                            );
 
                         } else {
+                            question=new FreeResponseQuestion(
+                                    command.getTitle(),
+                                    command.getContent(),
+                                    command.getAnswer(),
+                                    command.getLevel(),
+                                    command.getScore()
+                            );
+
                             exam.getQuestions()
                                     .put(
-                                            new FreeResponseQuestion(
-                                                    command.getTitle(),
-                                                    command.getContent(),
-                                                    command.getAnswer(),
-                                                    command.getLevel(),
-                                                    command.getScore()
-                                            )
+                                           questionRepository.saveAndFlush(question)
                                             ,
                                             command.getScore()
                                     );
-
+                            exam.setNumberOfQuestion(
+                                    exam.getNumberOfQuestion()+1
+                            );
                         }
-                        examRepository.saveAndFlush(exam);
+                        examRepository.save(exam);
+                        examRepository.flush();
                     }
                     ,
                     ()->{
@@ -113,8 +123,12 @@ public class AddQuestionService implements AddQuestionByMasterUseCase, UseQuesti
                                 exam.getQuestions().put(
                                         question,question.getScore()
                                 );
+                                exam.setNumberOfQuestion(
+                                        exam.getNumberOfQuestion()+1
+                                );
                                 // saving exam and flush:
-                                examRepository.saveAndFlush(exam);
+                                examRepository.save(exam);
+                                examRepository.flush();
                                 //set response:
                                 response.setValid(true);
                             }

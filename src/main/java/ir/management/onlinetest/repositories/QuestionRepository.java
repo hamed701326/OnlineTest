@@ -9,4 +9,6 @@ import java.util.Map;
 public interface QuestionRepository extends JpaRepository<Question,Long> {
     @Query("select q from  Exam e join e.questions q join e.course c where  c.id=?1")
     Map<Question,Float> findAllByCourseId( Long courseId);
+    @Query("select q from Exam e join e.questions q where e.id=?1")
+    Map<Question,Float> findAllByExamId(Long examId);
 }

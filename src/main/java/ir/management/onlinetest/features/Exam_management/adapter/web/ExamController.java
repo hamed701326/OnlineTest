@@ -1,27 +1,28 @@
 package ir.management.onlinetest.features.Exam_management.adapter.web;
 
-import ir.management.onlinetest.features.Exam_management.application.ports.CreateExamService;
-import ir.management.onlinetest.features.Exam_management.application.ports.DeleteExamService;
-import ir.management.onlinetest.features.Exam_management.application.ports.EditExamService;
-import ir.management.onlinetest.features.Exam_management.application.ports.ListExamService;
+import ir.management.onlinetest.features.Exam_management.application.ports.*;
 import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.*;
 import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.*;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/test")
 public class ExamController {
+    private final TakeExamService takeExamService;
     private final EditExamService editExamService;
     private final ListExamService listExamService;
     private final CreateExamService createExamService;
     private final DeleteExamService deleteExamService;
-    public ExamController(EditExamService editExamService, ListExamService listExamService, CreateExamService createExamService, DeleteExamService deleteExamService) {
+    public ExamController(TakeExamService takeExamService,
+                          EditExamService editExamService,
+                          ListExamService listExamService,
+                          CreateExamService createExamService,
+                          DeleteExamService deleteExamService) {
+        this.takeExamService = takeExamService;
         this.editExamService = editExamService;
         this.listExamService = listExamService;
         this.createExamService = createExamService;
@@ -60,5 +61,29 @@ public class ExamController {
                                                         BindingResult result){
         return  deleteExamService.deleteByMaster(command,result,request);
     }
+    @PostMapping("/take-test-by-student")
+    public TakeExamByStudentOutcome takeExamByStudent(@RequestBody TakeExamByStudentCommand command,
+                                                      HttpServletRequest request,
+                                                      BindingResult result){
+        return  takeExamService.takeByStudent(command,request,result);
+    }
+    @PostMapping("/set-leftTime-for-exam")
+    public SetLeftTimeForTakeExamOutcome setLeftTime(@RequestBody SetLeftTimeForTakeExamCommand command,
+                                                     HttpServletRequest request,
+                                                     BindingResult result){
+        return takeExamService.setLeftTime(command,result,request);
+    }
+    @GetMapping("/test-page")
+    public ModelAndView getExamPage(){
+        return new ModelAndView("../static/features/exam-management/take-exam-by-student/take-exam-by-student");
+    }
+    @PostMapping("/finish-test-by-student")
+    public FinishExamByStudentOutcome finishExam(HttpServletRequest request,BindingResult result){
+
+        return takeExamService.determineScoreAutomatically(request,result);
+
+
+    }
+
 
 }

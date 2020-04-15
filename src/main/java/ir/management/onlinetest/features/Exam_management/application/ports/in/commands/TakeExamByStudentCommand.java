@@ -5,13 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateExamByMasterCommand {
-    private Long courseId;
-    private String title;
-    private String details;
-    private int requiredTime;
+public class TakeExamByStudentCommand {
+    private Long examId;
 }

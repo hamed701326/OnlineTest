@@ -6,8 +6,9 @@ var html='<tr>\n' +
     '                <button class="remove">-</button>\n' +
     '            </td>\n' +
     '        </tr>';
+var type;
 $("input[name='type']").change(function () {
-    let type = $("input[name='type']:checked").val();
+    type = $("input[name='type']:checked").val();
     if(type==="Choice Question"){
         $('#div-free').hide();
         $('#div-choice').show();
@@ -35,7 +36,7 @@ function submit() {
             });
     });
     const addQuestionByMasterCommand={
-        'type':$("input[name='type']:checked").val(),
+        'type':type,
         'title':$('#title').val(),
         'content':$('#content').val(),
         'score':$('#score').val(),
@@ -49,8 +50,9 @@ function submit() {
         data: JSON.stringify(addQuestionByMasterCommand),
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            var result=$("#result");
-            if(data.validated){
+            let result=$("#result");
+            if(data.valid){
+
                 result.css("color:green");
                 result.html("this question added successfully");
                 $(".container").reset();

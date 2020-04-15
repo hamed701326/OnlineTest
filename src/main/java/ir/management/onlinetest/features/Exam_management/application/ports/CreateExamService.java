@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 @Service
 public class CreateExamService implements CreateExamByMasterUseCase {
@@ -40,17 +41,20 @@ public class CreateExamService implements CreateExamByMasterUseCase {
                             )
             );
         }else {
-            examRepository.saveAndFlush(new Exam(
-                    null,
-                    command.getTitle(),
-                    command.getDetails(),
-                    command.getRequiredTime(),
-                    0,
-                    new Date(),
-                    courseRepository.findById(command.getCourseId()).get(),
-                    accountRepository.findById((Long) request.getSession().getAttribute("accountId")).get(),
-                    null
-            ));
+            examRepository.saveAndFlush(
+                    new Exam(
+                           null,
+                            command.getTitle(),
+                            command.getDetails(),
+                            null,
+                            command.getRequiredTime(),
+                            0,
+                            new Date(),
+                            courseRepository.findById(command.getCourseId()).get(),
+                            accountRepository.findById((Long) request.getSession().getAttribute("accountId")).get(),
+                            new HashMap<>()
+                    )
+            );
            response.setValidated(true);
         }
         return response;

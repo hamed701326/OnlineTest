@@ -5,13 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
 @AllArgsConstructor
+@Getter@Setter
 @NoArgsConstructor
-public class CreateExamByMasterCommand {
-    private Long courseId;
-    private String title;
-    private String details;
-    private int requiredTime;
+public class SetLeftTimeForTakeExamCommand {
+    private double leftTime;
 }

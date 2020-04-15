@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("choice-question")
 public class ChoiceQuestion extends Question {
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinColumn
     private List<Answer> answers;
 

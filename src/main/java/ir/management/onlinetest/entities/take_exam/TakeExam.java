@@ -20,6 +20,7 @@ public class TakeExam {
     private Long id;
     private float score;
     private float maxScore;
+    private double leftTime;
     private StatusExam status;
     @Temporal(TemporalType.DATE)
     private Date createAt;

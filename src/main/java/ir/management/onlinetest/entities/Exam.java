@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 @Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Exam {
     @Id
@@ -21,6 +22,7 @@ public class Exam {
     private Long id;
     private String title;
     private String details;
+    private Float score;
     private double  timeRequired;
     private int numberOfQuestion;
     @Temporal(TemporalType.DATE)

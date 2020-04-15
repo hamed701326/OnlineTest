@@ -71,9 +71,8 @@ public class ListExamService implements ListExamByMasterUseCase, ListExamByStude
 
             response.setExamList(
                     examRepository
-                            .findAllByCourseIdAndAccountId(
-                                    command.getCourseId(),
-                                    (Long) request.getSession().getAttribute("accountId")
+                            .findAllByCourseId(
+                                    command.getCourseId()
                             )
                             .stream()
                             .map(ExamDTO::new)
