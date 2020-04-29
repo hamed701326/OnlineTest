@@ -16,4 +16,5 @@ public class UseQuestionByMasterCommand {
     private Long examId;
     private Long questionId;
     private boolean edited;
+    private float score;
 }

@@ -104,7 +104,7 @@ public class AddQuestionService implements AddQuestionByMasterUseCase, UseQuesti
         UseQuestionByMasterOutcome response=new UseQuestionByMasterOutcome();
         response.setValid(false);
         if(result.hasErrors()){
-            response.setErrorMessage(
+            response.setErrorMessages(
                     result
                             .getFieldErrors()
                             .stream()
@@ -119,23 +119,40 @@ public class AddQuestionService implements AddQuestionByMasterUseCase, UseQuesti
                     examRepository.findById(command.getExamId()).ifPresentOrElse(
                             // if exam exist:
                             exam -> {
-                                // adding question to exam
-                                exam.getQuestions().put(
-                                        question,question.getScore()
-                                );
-                                exam.setNumberOfQuestion(
-                                        exam.getNumberOfQuestion()+1
-                                );
-                                // saving exam and flush:
-                                examRepository.save(exam);
-                                examRepository.flush();
-                                //set response:
-                                response.setValid(true);
+                                //if exam doesn't have this question:
+                                if(!exam.getQuestions().containsKey(question)) {
+                                    if (command.isEdited()) {
+
+                                        exam.getQuestions().put(
+                                                question, command.getScore()
+                                        );
+                                    } else {
+                                        // adding question to exam
+                                        exam.getQuestions().put(
+                                                question, question.getScore()
+                                        );
+                                        exam.setNumberOfQuestion(
+                                                exam.getNumberOfQuestion() + 1
+                                        );
+                                    }
+                                    // saving exam and flush:
+                                    examRepository.save(exam);
+                                    examRepository.flush();
+                                    //set response:
+                                    response.setValid(true);
+                                }else{
+                                    response.getErrorMessages().put(
+                                            "ExistedQuestionInExam",
+                                            "This question added to this exam before."
+                                    );
+                                }
+
+
                             }
                             ,
                             //if exam not exist
                             () -> {
-                                response.getErrorMessage().put(
+                                response.getErrorMessages().put(
                                         "NotExistedExamWithId","There isn't any exam with this Id."
                                 );
                             }
@@ -143,7 +160,7 @@ public class AddQuestionService implements AddQuestionByMasterUseCase, UseQuesti
                 },
                 // if question doesn't exist
                 ()->{
-                    response.getErrorMessage().put(
+                    response.getErrorMessages().put(
                       "NotExistedQuestionWithId","There isn't any question with Id."
                     );
                 }

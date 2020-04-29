@@ -28,13 +28,13 @@ function f() {
 function finish() {
     sessionStorage.removeItem("examId");
     jQuery.ajax({
-        url:serverUrl()+"/test/finish-test-by-student",
+        url:"http://localhost:9001"+"/test/finish-test-by-student",
         type:"POST",
         success:function (data) {
             if(data.valid) {
                 alert("your test finished successfully"
                     + "\n your score for choice question is: "+data.score);
-                $(location).attr("href", serverUrl() + "/course/course-panel-for-student")
+                $(location).attr("href", "http://localhost:9001" + "/course/course-panel-for-student")
             }else {
                 
                 $.each(data.errorMessages, function (key, value) {
@@ -51,15 +51,14 @@ function startQuestion() {
     let takeExamByStudentCommand = {
         "examId": sessionStorage.getItem("examId")
     };
-    alert("in startQuestion \n"+"examId: "+takeExamByStudentCommand.examId);
+
     jQuery.ajax({
-       url:serverUrl()+"/test/take-test-by-student",
+       url:"http://localhost:9001"+"/test/take-test-by-student",
        type:"POST",
        contentType:"application/json",
        data:JSON.stringify(takeExamByStudentCommand),
        success:function (data) {
            if (data.valid) {
-               alert("in valid function");
                questions=data.questions;
                time=data.time;
                setInterval(f,1000);
@@ -88,8 +87,10 @@ function renderQuestion() {
     let content="<h3>"+question.content+"</h3>";
     if(question.type==="ChoiceQuestion") {
         let answers = question.answers;
+        //todo:shuffle answers:
+
         for (let i = 0; i < answers.length; i++) {
-            content += i + ". <input type='radio' name='choices' value='" + answers[i].id + "'>" + answers[i].content + "<br>";
+            content += (i+1) + ". <input type='radio' name='choices' value='" + answers[i].id + "'>" + answers[i].content + "<br>";
         }
     }else{
         content+="Answer:\n"+
@@ -119,16 +120,17 @@ function saveAnswer() {
     }else {
         freeAnswer=$("#freeAnswer").val();
     }
+    alert("FreeAnswer:"+freeAnswer);
     const questionId=questions[pos].id;
     const submitResponseByStudent={
         "answerId":answerId,
-        "answerContent":freeAnswer,
+        "freeAnswer":freeAnswer,
         "questionId":questionId,
         "examId":sessionStorage.getItem("examId"),
         "time":time
     };
     jQuery.ajax({
-        url:serverUrl()+"/test/submit-answer-by-student",
+        url:"http://localhost:9001"+"/test/submit-answer-by-student",
         type:"POST",
         contentType: "application/json",
         data: JSON.stringify(submitResponseByStudent),
@@ -164,7 +166,7 @@ function setLeftTime() {
         "leftTime":leftTime
     };
     jQuery.ajax({
-        url:serverUrl()+"/test/set-leftTime-for-exam",
+        url:"http://localhost:9001"+"/test/set-leftTime-for-exam",
         type:"POST",
         contentType:"application/json",
         data:JSON.stringify(setLeftTimeForExam),

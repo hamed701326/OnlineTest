@@ -1,5 +1,6 @@
 package ir.management.onlinetest.features.Exam_management.application.ports;
 
+import ir.management.onlinetest.entities.question.ChoiceQuestion;
 import ir.management.onlinetest.entities.take_exam.TakeAnswer;
 import ir.management.onlinetest.features.Exam_management.application.ports.in.SubmitResponseByStudentUseCase;
 import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.SubmitResponseByStudentCommand;
@@ -14,6 +15,7 @@ import org.springframework.validation.FieldError;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,36 +51,84 @@ public class SubmitResponseService implements SubmitResponseByStudentUseCase {
             if(!(takeExamId ==null)){
                 takeExamRepository.findById(takeExamId)
                         .ifPresentOrElse(
+                                // if takeExam existed
                                 takeExam -> {
 
                                     questionRepository.findById(command.getQuestionId()).ifPresentOrElse(
+                                            //if question existed
                                             question -> {
-                                                answerRepository.findById(command.getAnswerId()).ifPresentOrElse(
-                                                        answer -> {
-                                                            TakeAnswer takeAnswer=takeAnswerRepository.findByAnswerAndTakeExam(answer,takeExam);
-                                                            if(takeAnswer==null) {
-                                                                takeAnswer=new TakeAnswer();
-                                                                takeAnswer.setQuestion(question);
-                                                                takeAnswer.setMainScore(question.getScore());
-                                                                takeAnswer.setAnswer(answer);
-                                                                takeAnswer.setActive(true);
-                                                                takeAnswer.setTakeExam(takeExam);
-                                                                takeAnswer.setUpdateAt(new Date());
-                                                                takeAnswer.setCreateAt(new Date());
-                                                            }else {
-                                                                takeAnswer.setAnswer(answer);
-                                                                takeAnswer.setUpdateAt(new Date());
-                                                            }
-                                                            takeAnswerRepository.saveAndFlush(takeAnswer);
-                                                            response.setValid(true);
-                                                        },
-                                                        ()->{
-                                                            response.getErrorMessages().put(
-                                                                    "NotExistAnswerWithThisId","There isn't any answer with answerId"
-                                                            );
+                                                final Optional<TakeAnswer> takeAnswer = takeAnswerRepository.findByQuestionAndTakeExam(question, takeExam);
+                                                // if question be instance of ChoiceQuestion:
+                                                if(question instanceof ChoiceQuestion) {
+                                                    answerRepository.findById(command.getAnswerId()).ifPresentOrElse(
+                                                            //if answer existed
+                                                            answer -> {
 
-                                                        }
-                                                );
+                                                                takeAnswer.ifPresentOrElse(
+                                                                        // if question responded before then update
+                                                                        takeAnswer1 -> {
+                                                                            takeAnswer1.setAnswer(answer);
+                                                                            takeAnswer1.setUpdateAt(new Date());
+                                                                            takeAnswerRepository.saveAndFlush(takeAnswer1);
+                                                                        },
+                                                                        // if question didn't response before then create new answer in this takeExam
+                                                                        ()->
+                                                                        {
+                                                                            TakeAnswer takeAnswer1 = new TakeAnswer();
+                                                                            takeAnswer1.setQuestion(question);
+                                                                            takeAnswer1.setMainScore(question.getScore());
+                                                                            takeAnswer1.setAnswer(answer);
+                                                                            takeAnswer1.setActive(true);
+                                                                            takeAnswer1.setTakeExam(takeExam);
+                                                                            takeAnswer1.setUpdateAt(new Date());
+                                                                            takeAnswer1.setCreateAt(new Date());
+                                                                            takeAnswerRepository.saveAndFlush(takeAnswer1);
+                                                                        }
+                                                                );
+
+                                                                response.setValid(true);
+                                                            },
+                                                            // if answer doesn't exist:
+                                                            () -> {
+                                                                response.getErrorMessages().put(
+                                                                        "NotExistAnswerWithThisId", "There isn't any answer with answerId"
+                                                                );
+
+                                                            }
+                                                    );
+                                                }
+                                                // if question be instance of FreeQuestion:
+                                                else {
+                                                    takeAnswer.ifPresentOrElse(
+                                                            // if question responded before then update
+                                                            takeAnswer1 ->
+                                                            {
+                                                                takeAnswer1.setUpdateAt(new Date());
+                                                                takeAnswer1.setContent(command.getFreeAnswer());
+                                                                takeAnswerRepository.saveAndFlush(
+                                                                        takeAnswer1
+                                                                );
+                                                            }
+                                                            ,
+                                                            // if question didn't response before then create new answer in this takeExam
+                                                            ()->
+                                                            {
+                                                                takeAnswerRepository.saveAndFlush(
+                                                                        new TakeAnswer(null,
+                                                                                command.getFreeAnswer(),
+                                                                                true,
+                                                                                0,
+                                                                                question.getScore(),
+                                                                                new Date(),
+                                                                                new Date(),
+                                                                                takeExam,
+                                                                                null,
+                                                                                question)
+                                                                );
+                                                            }
+                                                    );
+                                                    response.setValid(true);
+                                                }
                                             }
                                             ,
                                             ()->{

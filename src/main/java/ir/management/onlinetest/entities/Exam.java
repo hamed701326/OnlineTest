@@ -1,6 +1,7 @@
 package ir.management.onlinetest.entities;
 
 import ir.management.onlinetest.entities.question.Question;
+import ir.management.onlinetest.enums.StatusExam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,9 @@ public class Exam {
     private Float score;
     private double  timeRequired;
     private int numberOfQuestion;
+    @Enumerated(EnumType.STRING)
+    private StatusExam status;
+
     @Temporal(TemporalType.DATE)
     private Date createDate;
     @ManyToOne

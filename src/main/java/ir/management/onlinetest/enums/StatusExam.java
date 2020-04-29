@@ -4,5 +4,6 @@ public enum StatusExam {
     UnReady,
     Ready,
     Doing,
-    Finished
+    Finished,
+    CorrectedByMaster
 }

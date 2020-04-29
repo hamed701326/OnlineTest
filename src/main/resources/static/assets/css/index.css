@@ -91,9 +91,11 @@ app-content-load{
     padding-left: 240px;
 
 }
-.logout{
-    align-items: flex-end;
-    text-align: left;
+.logout {
+    margin-left: 700px;
+    margin-top: 16px;
+    display: table;
+
 }
 .app-content-course{
     margin-left: 240px;

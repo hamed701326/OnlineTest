@@ -11,7 +11,7 @@ function listExamByMaster() {
             "courseId":sessionStorage.getItem("courseId")
         };
     jQuery.ajax({
-        url:"http://localhost:9001/test/list-test-by-master",
+        url:"http://localhost:9001"+"/test/list-test-by-master",
         type:"POST",
         contentType:"application/json",
         data:JSON.stringify(listExamByMasterCommand),
@@ -45,6 +45,15 @@ function prepareTable(data) {
             content += "<td >" +
                 "<button type='submit' class='btn btn-outline-secondary btn-sm' onclick='addQuestion(" + data[i].id+")'>Add Question</button>" +
                 "</td>";
+            if(data.status==="UnReady") {
+                content += "<td >" +
+                    "<button type='submit' class='btn btn-outline-secondary btn-sm' onclick='startTest(" + data[i].id + ")'>Start Test</button>" +
+                    "</td>";
+            }else{
+                content += "<td >" +
+                    "<button type='submit' class='btn btn-outline-secondary btn-sm' onclick='finishTest(" + data[i].id + ")'>Finish Test</button>" +
+                    "</td>";
+            }
             content += "</tr>";
         }
         $('#table-body').html(content);
@@ -56,4 +65,65 @@ function addQuestion(testId) {
     sessionStorage.setItem("testId",testId);
     $("#app-content-course").load("features/question-management/add-question-menu.html")
 
+}
+function finishTest(testId) {
+    sessionStorage.setItem("testId",testId);
+    const finishTestByMasterCommand={
+        "examId":testId
+    };
+    jQuery.ajax({
+        url:"http://localhost:9001"+"/test/finish-test-by-master",
+        type:"POST",
+        contentType:"application/json",
+        data:JSON.stringify(finishTestByMasterCommand),
+        success:function (data) {
+            if (data.valid) {
+                alert("Test finish successfully")
+            } else {
+                //Set error messages
+                $.each(data.errorMessages, function (key, value) {
+                    alert(
+                        "Error:\n"+
+                        "Test can't finish unfortunately\n"+
+                        key+":"+value
+                    )
+                });
+            }
+        },
+        error:function (errorMessages) {
+            alert(
+                "Error:\n"+
+                errorMessages.responseJSON.message
+            );
+        }
+    })
+}
+function startTest(testId) {
+    sessionStorage.setItem("testId",testId);
+    const startTestByMasterCommand={
+        "examId":testId
+    };
+    jQuery.ajax({
+        url:"http://localhost:9001"+"/test/start-test-by-master",
+        type:"POST",
+        contentType:"application/json",
+        data:JSON.stringify(startTestByMasterCommand),
+        success:function (data) {
+            if (data.valid) {
+                alert("Test start successfully")
+            } else {
+                //Set error messages
+                $.each(data.errorMessages, function (key, value) {
+                    alert(
+                        "Error:\n"+
+                        "Test can't start unfortunately\n"+
+                        key+":"+value
+                    )
+                });
+            }
+        },
+        error:function (errorMessages) {
+            alert(errorMessages.responseJSON.message);
+        }
+    })
 }

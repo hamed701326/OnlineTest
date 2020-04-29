@@ -31,7 +31,7 @@ function createExamByMaster(){
             }
         },
         error: function (errorMessage) {
-            // alert(errorMessage)
+            // alert(errorMessages)
             $.each(errorMessage, function (key, value) {
                 $('input[name=' + key + ']').after('<span class="error">' + value + '</span>');
             });

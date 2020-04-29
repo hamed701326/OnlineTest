@@ -4,9 +4,11 @@ import ir.management.onlinetest.features.question_management.application.ports.A
 import ir.management.onlinetest.features.question_management.application.ports.FindQuestionService;
 import ir.management.onlinetest.features.question_management.application.ports.in.commands.AddQuestionByMasterCommand;
 import ir.management.onlinetest.features.question_management.application.ports.in.commands.FindQuestionByMasterCommand;
+import ir.management.onlinetest.features.question_management.application.ports.in.commands.ListAllQuestionByMasterCommand;
 import ir.management.onlinetest.features.question_management.application.ports.in.commands.UseQuestionByMasterCommand;
 import ir.management.onlinetest.features.question_management.application.ports.in.outcomes.AddQuestionByMasterOutcome;
 import ir.management.onlinetest.features.question_management.application.ports.in.outcomes.FindQuestionByMasterOutcome;
+import ir.management.onlinetest.features.question_management.application.ports.in.outcomes.ListAllQuestionByMasterOutcome;
 import ir.management.onlinetest.features.question_management.application.ports.in.outcomes.UseQuestionByMasterOutcome;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +47,11 @@ public class QuestionController {
                                                           HttpServletRequest request){
         return addQuestionService.useFromQuestionBank(command,result,request);
     };
+    @PostMapping("/list-all-question-by-master-for-test")
+    public ListAllQuestionByMasterOutcome listByMaster(@RequestBody ListAllQuestionByMasterCommand command,
+                                                HttpServletRequest request,
+                                                BindingResult result){
+        return findQuestionService.listByMaster(command,request,result);
+    }
 
 }

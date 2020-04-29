@@ -1,3 +1,3 @@
 function serverUrl() {
-    return "http://localhost:9001"
+    return "http://localhost:9001";
 }

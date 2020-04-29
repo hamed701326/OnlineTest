@@ -55,6 +55,7 @@ function submit() {
 
                 result.css("color:green");
                 result.html("this question added successfully");
+                $("#list-all-question-div").load('features/question-management/list-all-question-by-master-for-test/list-all-question-by-master-for-test.html');
                 $(".container").reset();
             }else{
                 //Set error messages
@@ -66,7 +67,7 @@ function submit() {
             }
         },
         error: function (errorMessage) {
-            // alert(errorMessage)
+            // alert(errorMessages)
             $.each(errorMessage, function (key, value) {
                 $('input[name=' + key + ']').after('<span class="error">' + value + '</span>');
             });

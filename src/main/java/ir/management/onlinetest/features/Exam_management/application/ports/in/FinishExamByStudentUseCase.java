@@ -6,6 +6,5 @@ import org.springframework.validation.BindingResult;
 import javax.servlet.http.HttpServletRequest;
 
 public interface FinishExamByStudentUseCase {
-    FinishExamByStudentOutcome determineScoreAutomatically(HttpServletRequest request,
-                                                           BindingResult result);
+    FinishExamByStudentOutcome determineScoreAutomatically(HttpServletRequest request);
 }

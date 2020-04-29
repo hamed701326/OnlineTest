@@ -11,6 +11,6 @@ import java.util.Map;
 @Outcome
 public class UseQuestionByMasterOutcome {
     boolean valid;
-    Map<String,String> errorMessage=new HashMap<>();
+    Map<String,String> errorMessages=new HashMap<>();
 
 }

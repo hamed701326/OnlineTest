@@ -1,0 +1,34 @@
+<script src="features/question-management/list-free-question-by-master/list-free-question-by-master.js"></script>
+<div id="list-free-question-by-master">
+    <div id="question-and-answer-div"  style="display: none">
+        <div>
+            <div id="counterQuestion"></div>
+        </div>
+        <div>
+            <div >
+                <label class="label" for="question">Question:</label>
+                <input type="text" id="question" class="form-control">
+            </div>
+            <div >
+                <label for="student-answer">Student Answer:</label>
+                <input type="text" id="student-answer" class="form-control">
+            </div>
+            <div >
+                <label for="master-answer" onclick="$('#master-answer').show()">Master Answer:</label>
+                <input type="text" class="form-control" id="master-answer" style="display: none">
+            </div>
+            <label for="score-field">Score:</label>
+            <input type="text" id="score-field" >
+
+            <button type="submit" class="btn btn-secondary" onclick="addScoreToExam()">Submit</button>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-info" onclick="goPrivies()">Privies</button>
+            <button class="btn btn-info" onclick="goNext()">Next</button>
+        </div>
+        <button class="btn-outline-secondary" onclick="finish()">finish</button>
+    </div>
+    <div id="correct-question-result-div">
+
+    </div>
+</div>

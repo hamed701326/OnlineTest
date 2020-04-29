@@ -8,5 +8,5 @@ import java.util.Map;
 @Setter
 public class CreateExamByMasterOutcome {
     boolean validated;
-    Map<String,String> errorMessage;
+    Map<String,String> errorMessages;
 }

@@ -2,17 +2,14 @@ package ir.management.onlinetest.features.Exam_management.application.ports;
 
 import ir.management.onlinetest.entities.Exam;
 import ir.management.onlinetest.entities.question.ChoiceQuestion;
+import ir.management.onlinetest.entities.question.FreeResponseQuestion;
 import ir.management.onlinetest.entities.question.Question;
 import ir.management.onlinetest.entities.take_exam.TakeExam;
 import ir.management.onlinetest.enums.StatusExam;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.FinishExamByStudentUseCase;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.SetLeftTimeForTakeExamUseCase;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.TakeExamByStudentUseCase;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.SetLeftTimeForTakeExamCommand;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.TakeExamByStudentCommand;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.FinishExamByStudentOutcome;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.SetLeftTimeForTakeExamOutcome;
-import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.TakeExamByStudentOutcome;
+import ir.management.onlinetest.features.Exam_management.application.ports.in.*;
+import ir.management.onlinetest.features.Exam_management.application.ports.in.commands.*;
+import ir.management.onlinetest.features.Exam_management.application.ports.in.outcomes.*;
+import ir.management.onlinetest.features.Exam_management.domain.QuestionDTOForMaster;
 import ir.management.onlinetest.features.question_management.domain.QuestionDTO;
 import ir.management.onlinetest.repositories.*;
 import org.springframework.stereotype.Service;
@@ -27,7 +24,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class TakeExamService implements TakeExamByStudentUseCase, SetLeftTimeForTakeExamUseCase, FinishExamByStudentUseCase {
+public class TakeExamService implements TakeExamByStudentUseCase,
+        SetLeftTimeForTakeExamUseCase,
+        FinishExamByStudentUseCase,
+        ListQuestionAndAnswerByMasterUseCase,
+        CorrectFreeQuestionByMasterUseCase,
+        FinishCorrectionByMasterUseCase{
 
     private final ExamRepository examRepository;
     private final TakeExamRepository takeExamRepository;
@@ -49,12 +51,7 @@ public class TakeExamService implements TakeExamByStudentUseCase, SetLeftTimeFor
         response.setValid(false);
         if(result.hasErrors()){
             response.setErrorMessages(
-                    result
-                            .getFieldErrors()
-                            .stream()
-                            .collect(Collectors
-                                    .toMap(FieldError::getField, FieldError::getDefaultMessage)
-                            )
+                    getCollect(result)
             );
         }else {
 //            Map<Question,Float> questions=questionRepository
@@ -163,12 +160,7 @@ public class TakeExamService implements TakeExamByStudentUseCase, SetLeftTimeFor
         response.setValid(false);
         if(result.hasErrors()){
             response.setErrorMessages(
-                    result
-                            .getFieldErrors()
-                            .stream()
-                            .collect(Collectors
-                                    .toMap(FieldError::getField, FieldError::getDefaultMessage)
-                            )
+                    getCollect(result)
             );
         }else {
             Long takeExamId= (Long) request.getSession().getAttribute("takeExamId");
@@ -201,58 +193,135 @@ public class TakeExamService implements TakeExamByStudentUseCase, SetLeftTimeFor
         return response;
     }
 
-    @Override
-    public FinishExamByStudentOutcome determineScoreAutomatically(HttpServletRequest request,BindingResult result) {
-        FinishExamByStudentOutcome response=new FinishExamByStudentOutcome();
-        if(result.hasErrors()){
-            response.setErrorMessages(
-                    result
-                            .getFieldErrors()
-                            .stream()
-                            .collect(Collectors
-                                    .toMap(FieldError::getField, FieldError::getDefaultMessage)
-                            )
-            );
-        }else {
-            Long takeExamId= (Long) request.getSession().getAttribute("takeExamId");
-            String feature="FinishExamByStudent: ";
-            if(takeExamId==null){
-                response.getErrorMessages().put(
-                        "NotExistTakeExamIdAttributeInSession",feature+"There isn't any attribute  with name " +
-                                "'takeExamId' in HttpSession"
+    private Map<String, String> getCollect(BindingResult result) {
+        return result
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors
+                        .toMap(FieldError::getField, FieldError::getDefaultMessage)
                 );
-            }
-            else {
-                float score=0;
-                takeExamRepository.findById(takeExamId).ifPresentOrElse(
+    }
 
-                        takeExam -> {
-                            //determine score automatically:
-                            takeAnswerRepository.findAllByTakeExam(takeExam)
-                                    .stream()
-                                    .filter(
-                                            takeAnswer -> takeAnswer.getAnswer().isCorrect() && (takeAnswer.getQuestion() instanceof ChoiceQuestion)
-                                            )
-                                    .forEach(
-                                            takeAnswer ->takeExam.setScore(takeExam.getScore()+takeAnswer.getScore())
-                                    );
-                            takeExamRepository.saveAndFlush(takeExam);
-                            response.setValid(true);
-                            response.setScore(takeExam.getScore());
-                            //removing takeExamId Attribute in HttpSession:
-                            request.getSession().removeAttribute("takeExamId");
-                        }
-                        ,
-                        () -> {
-                            response.getErrorMessages()
-                                    .put(
-                                            "NotExistedTakeExamWithId", feature + "There isn't any takeExam with id."
-                                    );
-                        }
-                );
-            }
+    @Override
+    public FinishExamByStudentOutcome determineScoreAutomatically(HttpServletRequest request) {
+        FinishExamByStudentOutcome response=new FinishExamByStudentOutcome();
+
+        Long takeExamId= (Long) request.getSession().getAttribute("takeExamId");
+        String feature="FinishExamByStudent: ";
+        if(takeExamId==null){
+            response.getErrorMessages().put(
+                    "NotExistTakeExamIdAttributeInSession",feature+"There isn't any attribute  with name " +
+                            "'takeExamId' in HttpSession"
+            );
+        }
+        else {
+            float score=0;
+            takeExamRepository.findById(takeExamId).ifPresentOrElse(
+
+                    takeExam -> {
+                        //determine score automatically:
+                        takeAnswerRepository.findAllByTakeExam(takeExam)
+                                .stream()
+                                .filter(
+                                        takeAnswer->takeAnswer.getQuestion() instanceof ChoiceQuestion
+                                        )
+                                .filter(
+                                        takeAnswer -> takeAnswer.getAnswer().isCorrect()
+                                )
+                                .forEach(
+                                        takeAnswer ->takeExam
+                                                .setScore(takeExam.getScore()+takeAnswer.getMainScore())
+                                );
+                        takeExam.setFinishedAt(new Date());
+                        takeExam.setStatus(StatusExam.Finished);
+                        takeExamRepository.saveAndFlush(takeExam);
+                        response.setValid(true);
+                        response.setScore(takeExam.getScore());
+                        //removing takeExamId Attribute in HttpSession:
+                        request.getSession().removeAttribute("takeExamId");
+                    }
+                    ,
+                    () -> {
+                        response.getErrorMessages()
+                                .put(
+                                        "NotExistedTakeExamWithId", feature + "There isn't any takeExam with id."
+                                );
+                    }
+            );
         }
 
+        return response;
+    }
+
+    @Override
+    public ListQuestionAndAnswerByMasterOutcome listByMaster(ListQuestionAndAnswerByMasterCommand command, BindingResult result, HttpServletRequest request) {
+        ListQuestionAndAnswerByMasterOutcome response=new ListQuestionAndAnswerByMasterOutcome();
+        response.setValid(false);
+        if(result.hasErrors()){
+            response.setErrorMessages(getCollect(result));
+        }else {
+            response.setQuestionAndAnswers(
+                takeAnswerRepository
+                    .findAllByTakeExamId(command.getTakeExamId())
+                    .stream()
+                        .filter(takeAnswer -> takeAnswer.getQuestion() instanceof FreeResponseQuestion)
+                        .map(QuestionDTOForMaster::new)
+                        .collect(Collectors.toList())
+            );
+            response.setValid(true);
+        }
+        return response;
+    }
+
+    @Override
+    public CorrectFreeQuestionByMasterOutcome correctByMaster(CorrectFreeQuestionByMasterCommand command, BindingResult result, HttpServletRequest request) {
+        CorrectFreeQuestionByMasterOutcome response=new CorrectFreeQuestionByMasterOutcome();
+        if(result.hasErrors()){
+            response.setErrorMessages(getCollect(result));
+        }else {
+            //set score to takeAnswer:
+            takeAnswerRepository
+                    .findById(command.getTakeAnswerId())
+                    .ifPresent(
+                            takeAnswer ->
+                            {
+                                takeAnswer.setMainScore(command.getScore());
+                                takeAnswerRepository.saveAndFlush(takeAnswer);
+                            }
+                    );
+            //add score to takeExam:
+            takeExamRepository
+                    .findById(command.getTakeExamId())
+                    .ifPresent(
+                            takeExam ->
+                            {
+                                takeExam.setScore(takeExam.getScore()+command.getScore());
+                                takeExamRepository.saveAndFlush(takeExam);
+                            }
+                        );
+            response.setValid(true);
+        }
+        return response;
+    }
+
+    @Override
+    public FinishCorrectionByMasterOutcome finishCorrectionByMaster(FinishCorrectionByMasterCommand command, BindingResult result, HttpServletRequest request) {
+        FinishCorrectionByMasterOutcome response=new FinishCorrectionByMasterOutcome();
+        response.setValid(false);
+        if(result.hasErrors())
+            response.setErrorMessage(getCollect(result));
+        else{
+            takeExamRepository
+                    .findById(command.getTakeExamId())
+                    .ifPresent(
+                            takeExam ->
+                            {
+                                takeExam.setStatus(StatusExam.CorrectedByMaster);
+                                takeExamRepository.saveAndFlush(takeExam);
+                            }
+                    );
+            response.setValid(true);
+        }
         return response;
     }
 }

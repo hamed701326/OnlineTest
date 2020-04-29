@@ -13,3 +13,6 @@ function loadPage(page) {
     }
 
 }
+function logOut() {
+    $(location).attr('href',"http://localhost:9001/logout");
+}

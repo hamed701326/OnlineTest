@@ -10,5 +10,5 @@ import java.util.Map;
 @Setter
 public class DeleteExamByMasterOutcome {
     boolean valid;
-    Map<String,String> errorMessage=new HashMap<>();
+    Map<String,String> errorMessages =new HashMap<>();
 }

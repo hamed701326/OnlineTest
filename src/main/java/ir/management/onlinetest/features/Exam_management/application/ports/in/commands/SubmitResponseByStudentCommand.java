@@ -14,4 +14,5 @@ import lombok.Setter;
 public class SubmitResponseByStudentCommand {
     private Long examId,questionId,answerId;
     private String freeAnswer;
+    private Float time;
 }

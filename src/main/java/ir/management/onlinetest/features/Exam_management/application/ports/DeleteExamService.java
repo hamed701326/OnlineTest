@@ -28,7 +28,7 @@ public class DeleteExamService implements DeleteExamByMasterUseCase {
         response.setValid(true);
         if(result.hasErrors()){
             response.setValid(false);
-            response.setErrorMessage(
+            response.setErrorMessages(
                     result
                             .getFieldErrors()
                             .stream()
@@ -46,7 +46,7 @@ public class DeleteExamService implements DeleteExamByMasterUseCase {
                             response.setValid(true);
                         } else {
                             response.setValid(false);
-                            response.getErrorMessage().put("NotExistThisTestForMaster",
+                            response.getErrorMessages().put("NotExistThisTestForMaster",
                                     "This Test is not yours.");
                         }
                     }
